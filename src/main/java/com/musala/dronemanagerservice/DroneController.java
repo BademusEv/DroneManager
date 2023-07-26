@@ -24,8 +24,8 @@ public class DroneController {
     }
 
     @PutMapping("/load/{serialNumber}")
-    public void loadDrone(@PathVariable String serialNumber, MedicationDto medication) {
-        service.loadDrone(serialNumber, medication);
+    public DroneDto loadDrone(@PathVariable String serialNumber, @RequestBody Set<MedicationDto> medication) {
+        return service.loadDrone(serialNumber, medication);
     }
 
     @GetMapping("/checkLoading/{serialNumber}")

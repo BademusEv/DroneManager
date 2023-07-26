@@ -10,7 +10,7 @@ import java.util.Set;
 public interface DroneManagerService {
     void registerDrone(RegisterDroneDto drone);
 
-    void loadDrone(String serialNumber, MedicationDto medication);
+    DroneDto loadDrone(String serialNumber, Set<MedicationDto> medication);
 
     Set<MedicationDto> checkLoading(String serialNumber);
 

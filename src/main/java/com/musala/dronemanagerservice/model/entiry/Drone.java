@@ -37,6 +37,6 @@ public class Drone {
         this.weightLimit = weightLimit;
         this.batteryCapacity = batteryCapacity;
         this.state = state;
-        this.medications = Optional.ofNullable(medications).orElse(Set.of());
+        this.medications = Optional.ofNullable(medications).orElse(new HashSet<>());
     }
 }

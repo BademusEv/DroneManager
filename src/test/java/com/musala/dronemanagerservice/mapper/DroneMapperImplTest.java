@@ -6,11 +6,14 @@ import com.musala.dronemanagerservice.model.constant.State;
 import com.musala.dronemanagerservice.model.dto.RegisterDroneDto;
 import com.musala.dronemanagerservice.model.entiry.Drone;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class DroneMapperImplTest {
-    DroneMapperImpl droneMapper = new DroneMapperImpl();
+    @Mock
+    MedicationMapper medicationMapper;
+    DroneMapperImpl droneMapper = new DroneMapperImpl(medicationMapper);
 
     @Test
     void mapToEntity() {
