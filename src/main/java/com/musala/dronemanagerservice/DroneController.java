@@ -6,6 +6,7 @@ import com.musala.dronemanagerservice.model.dto.MedicationDto;
 import com.musala.dronemanagerservice.model.dto.RegisterDroneDto;
 import com.musala.dronemanagerservice.service.DroneManagerService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
@@ -17,6 +18,7 @@ public class DroneController {
     private final DroneManagerService service;
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public void registerDrone(RegisterDroneDto drone) {
         service.registerDrone(drone);
     }

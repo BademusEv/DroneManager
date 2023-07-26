@@ -2,7 +2,9 @@ package com.musala.dronemanagerservice.model.entiry;
 
 import com.musala.dronemanagerservice.model.constant.Model;
 import com.musala.dronemanagerservice.model.constant.State;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -10,9 +12,12 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Data
+@Builder
+@NoArgsConstructor
 @Document(collection = "drones")
 public class Drone {
     @Id
