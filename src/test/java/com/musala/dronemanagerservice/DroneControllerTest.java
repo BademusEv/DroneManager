@@ -20,9 +20,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Set;
 
 import static org.mockito.ArgumentMatchers.anySet;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
@@ -63,5 +67,19 @@ class DroneControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(medications)))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    @SneakyThrows
+    void testGetLoadingOfADrone() {
+        var medications = Set.of(
+                new MedicationDto("A", 41, "3142dwr", "base64Image"),
+                new MedicationDto("B", 35, "dwr234r", "base64Image")
+        );
+        when(service.checkLoading("vslvpdjop3241adf")).thenReturn(medications);
+
+        mockMvc.perform(get("/drone/checkLoading/vslvpdjop3241adf"))
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(medications)));
     }
 }

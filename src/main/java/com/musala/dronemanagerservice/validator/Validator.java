@@ -4,7 +4,6 @@ import com.musala.dronemanagerservice.exception.DroneOverloadedException;
 import com.musala.dronemanagerservice.model.entiry.Drone;
 import com.musala.dronemanagerservice.model.entiry.Medication;
 import lombok.experimental.UtilityClass;
-import org.springframework.stereotype.Component;
 
 @UtilityClass
 public class Validator {

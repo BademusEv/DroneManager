@@ -1,12 +1,10 @@
 package com.musala.dronemanagerservice.mapper.implementation;
 
 import com.musala.dronemanagerservice.mapper.MedicationMapper;
-import com.musala.dronemanagerservice.model.dto.MedicationDto;
 import com.musala.dronemanagerservice.model.entiry.Medication;
 import org.jeasy.random.EasyRandom;
 import org.junit.jupiter.api.Test;
 
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
