@@ -63,6 +63,10 @@ public class DroneManagerServiceImpl implements DroneManagerService {
 
     @Override
     public BatteryDto checkBattery(String serialNumber) {
-        throw new RuntimeException("not implemented yet");
+        Drone drone = repository.findById(serialNumber).orElseThrow(() ->
+                new ResourceNotFoundException(
+                        String.format("Drone with serial number: '%s' doesn't exist", serialNumber)));
+
+        return droneMapper.mapToBatteryDto(drone);
     }
 }

@@ -3,6 +3,7 @@ package com.musala.dronemanagerservice.mapper.implementation;
 import com.musala.dronemanagerservice.mapper.DroneMapper;
 import com.musala.dronemanagerservice.mapper.MedicationMapper;
 import com.musala.dronemanagerservice.model.constant.State;
+import com.musala.dronemanagerservice.model.dto.BatteryDto;
 import com.musala.dronemanagerservice.model.dto.DroneDto;
 import com.musala.dronemanagerservice.model.dto.RegisterDroneDto;
 import com.musala.dronemanagerservice.model.entiry.Drone;
@@ -43,6 +44,11 @@ public class DroneMapperImpl implements DroneMapper {
     @Override
     public Set<DroneDto> mapToDtoSet(Set<Drone> drones) {
         return drones.stream().map(this::mapToDto).collect(Collectors.toSet());
+    }
+
+    @Override
+    public BatteryDto mapToBatteryDto(Drone drone) {
+        return new BatteryDto(drone.getSerialNumber(), drone.getBatteryCapacity());
     }
 
 

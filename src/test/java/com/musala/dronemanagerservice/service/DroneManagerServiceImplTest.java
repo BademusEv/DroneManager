@@ -5,27 +5,26 @@ import com.musala.dronemanagerservice.mapper.MedicationMapper;
 import com.musala.dronemanagerservice.mapper.implementation.DroneMapperImpl;
 import com.musala.dronemanagerservice.model.constant.Model;
 import com.musala.dronemanagerservice.model.constant.State;
+import com.musala.dronemanagerservice.model.dto.BatteryDto;
 import com.musala.dronemanagerservice.model.dto.DroneDto;
 import com.musala.dronemanagerservice.model.dto.MedicationDto;
 import com.musala.dronemanagerservice.model.dto.RegisterDroneDto;
 import com.musala.dronemanagerservice.model.entiry.Drone;
 import com.musala.dronemanagerservice.model.entiry.Medication;
 import com.musala.dronemanagerservice.repository.DroneRepository;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.HashSet;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.anySet;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -121,6 +120,20 @@ class DroneManagerServiceImplTest {
     }
 
     @Test
-    void checkBattery() {
+    void testCheckBattery() {
+        String serialNumber = "adegwkfe314r2";
+        Drone drone = Utils.getStockDrone();
+        BatteryDto expectedBattery = new BatteryDto(serialNumber, drone.getBatteryCapacity());
+
+        when(repository.findById(serialNumber)).thenReturn(Optional.of(drone));
+        when(droneMapper.mapToBatteryDto(drone))
+                .thenReturn(expectedBattery);
+
+        BatteryDto actualBattery = service.checkBattery(serialNumber);
+
+        assertNotNull(actualBattery);
+        assertEquals(expectedBattery, actualBattery);
+        verify(repository).findById(serialNumber);
+        verify(droneMapper).mapToBatteryDto(drone);
     }
 }

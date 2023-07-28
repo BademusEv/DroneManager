@@ -4,11 +4,11 @@ import com.musala.dronemanagerservice.Utils;
 import com.musala.dronemanagerservice.mapper.implementation.DroneMapperImpl;
 import com.musala.dronemanagerservice.model.constant.Model;
 import com.musala.dronemanagerservice.model.constant.State;
+import com.musala.dronemanagerservice.model.dto.BatteryDto;
 import com.musala.dronemanagerservice.model.dto.DroneDto;
 import com.musala.dronemanagerservice.model.dto.RegisterDroneDto;
 import com.musala.dronemanagerservice.model.entiry.Drone;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import java.util.Set;
@@ -19,7 +19,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.anySet;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -63,5 +62,13 @@ class DroneMapperImplTest {
 
         assertEquals(originalSerialNumbers, mappedDronesSerialNumbers);
         verify(medicationMapper, times(4)).toDtoSet(Set.of());
+    }
+
+    @Test
+    void testMapToBatteryDto() {
+        Drone drone = Utils.getStockDrone();
+        BatteryDto batteryDto = droneMapper.mapToBatteryDto(drone);
+        assertEquals(drone.getSerialNumber(), batteryDto.serialNumber());
+        assertEquals(drone.getBatteryCapacity(), batteryDto.batteryCapacity());
     }
 }
