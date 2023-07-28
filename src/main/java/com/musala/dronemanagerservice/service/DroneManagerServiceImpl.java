@@ -2,6 +2,7 @@ package com.musala.dronemanagerservice.service;
 
 import com.musala.dronemanagerservice.mapper.DroneMapper;
 import com.musala.dronemanagerservice.mapper.MedicationMapper;
+import com.musala.dronemanagerservice.model.constant.State;
 import com.musala.dronemanagerservice.model.dto.BatteryDto;
 import com.musala.dronemanagerservice.model.dto.DroneDto;
 import com.musala.dronemanagerservice.model.dto.MedicationDto;
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -55,7 +57,8 @@ public class DroneManagerServiceImpl implements DroneManagerService {
 
     @Override
     public Set<DroneDto> getAvailableDrones() {
-        throw new RuntimeException("not implemented yet");
+        Set<Drone> availableDrones = repository.findAllByState(State.IDLE);
+        return droneMapper.mapToDtoSet(availableDrones);
     }
 
     @Override

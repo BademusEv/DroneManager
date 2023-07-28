@@ -17,10 +17,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.anySet;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -96,7 +101,23 @@ class DroneManagerServiceImplTest {
     }
 
     @Test
-    void getAvailableDrones() {
+    void testGetAvailableDrones() {
+        Set<Drone> drones = Utils.getStockDrones(4);
+        Set<String> serialNumbers = drones.stream().map(Drone::getSerialNumber).collect(Collectors.toSet());
+        Set<DroneDto> droneDtos = Utils.getStockDroneDto(serialNumbers);
+
+        when(repository.findAllByState(State.IDLE)).thenReturn(drones);
+        when(droneMapper.mapToDtoSet(drones)).thenReturn(droneDtos);
+
+        Set<DroneDto> availableDrones = service.getAvailableDrones();
+
+        Set<String> actualSerialNumbers = availableDrones.stream()
+                .map(DroneDto::serialNumber)
+                .collect(Collectors.toSet());
+
+        assertEquals(serialNumbers, actualSerialNumbers);
+        verify(repository).findAllByState(State.IDLE);
+        verify(droneMapper).mapToDtoSet(drones);
     }
 
     @Test

@@ -9,6 +9,10 @@ import com.musala.dronemanagerservice.model.entiry.Drone;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 @Component
 @RequiredArgsConstructor
 public class DroneMapperImpl implements DroneMapper {
@@ -34,6 +38,11 @@ public class DroneMapperImpl implements DroneMapper {
                 entity.getState(),
                 medicationMapper.toDtoSet(entity.getMedications())
         );
+    }
+
+    @Override
+    public Set<DroneDto> mapToDtoSet(Set<Drone> drones) {
+        return drones.stream().map(this::mapToDto).collect(Collectors.toSet());
     }
 
 

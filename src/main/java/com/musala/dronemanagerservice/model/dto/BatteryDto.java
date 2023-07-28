@@ -1,4 +1,4 @@
 package com.musala.dronemanagerservice.model.dto;
 
-public record BatteryDto(Short batteryCapacity) {
+public record BatteryDto(String serialNumber, Float batteryCapacity) {
 }
