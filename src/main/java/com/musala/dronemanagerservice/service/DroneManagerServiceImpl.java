@@ -12,10 +12,8 @@ import com.musala.dronemanagerservice.model.entiry.Medication;
 import com.musala.dronemanagerservice.repository.DroneRepository;
 import com.musala.dronemanagerservice.validator.Validator;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -35,7 +33,7 @@ public class DroneManagerServiceImpl implements DroneManagerService {
     @Override
     public DroneDto loadDrone(String serialNumber, Set<MedicationDto> medicationDtos) {
         Drone drone = repository.findById(serialNumber).orElseThrow(() ->
-                new ResourceNotFoundException(
+                new RuntimeException(
                         String.format("Drone with serial number: '%s' doesn't exist", serialNumber)));
 
         Set<Medication> medications = medicationMapper.toEntitySet(medicationDtos);
@@ -49,7 +47,7 @@ public class DroneManagerServiceImpl implements DroneManagerService {
     @Override
     public Set<MedicationDto> checkLoading(String serialNumber) {
         Drone drone = repository.findById(serialNumber).orElseThrow(() ->
-                new ResourceNotFoundException(
+                new RuntimeException(
                         String.format("Drone with serial number: '%s' doesn't exist", serialNumber)));
 
         return medicationMapper.toDtoSet(drone.getMedications());
@@ -64,7 +62,7 @@ public class DroneManagerServiceImpl implements DroneManagerService {
     @Override
     public BatteryDto checkBattery(String serialNumber) {
         Drone drone = repository.findById(serialNumber).orElseThrow(() ->
-                new ResourceNotFoundException(
+                new RuntimeException(
                         String.format("Drone with serial number: '%s' doesn't exist", serialNumber)));
 
         return droneMapper.mapToBatteryDto(drone);

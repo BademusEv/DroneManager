@@ -1,6 +1,7 @@
 package com.musala.dronemanagerservice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.musala.dronemanagerservice.controller.DroneController;
 import com.musala.dronemanagerservice.model.constant.Model;
 import com.musala.dronemanagerservice.model.constant.State;
 import com.musala.dronemanagerservice.model.dto.DroneDto;

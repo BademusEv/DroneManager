@@ -4,3 +4,7 @@ spring:
       uri: mongodb://localhost:27017/drones
       username: root
       password: secret
+
+springdoc:
+  api-docs.path: /api-docs
+  swagger-ui.path: /
