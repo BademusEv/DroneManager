@@ -93,6 +93,7 @@ public class DroneController {
                      }
                      """))),
             @ApiResponse(responseCode = "400"),
+            @ApiResponse(responseCode = "404"),
             @ApiResponse(responseCode = "500")
     })
     public DroneDto loadDrone(@Parameter(description = "Serial number of the drone to load") @PathVariable String serialNumber,

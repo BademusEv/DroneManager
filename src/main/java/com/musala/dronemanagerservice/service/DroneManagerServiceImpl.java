@@ -1,5 +1,6 @@
 package com.musala.dronemanagerservice.service;
 
+import com.musala.dronemanagerservice.exception.DroneNotFoundException;
 import com.musala.dronemanagerservice.mapper.DroneMapper;
 import com.musala.dronemanagerservice.mapper.MedicationMapper;
 import com.musala.dronemanagerservice.model.constant.State;
@@ -32,9 +33,7 @@ public class DroneManagerServiceImpl implements DroneManagerService {
 
     @Override
     public DroneDto loadDrone(String serialNumber, Set<MedicationDto> medicationDtos) {
-        Drone drone = repository.findById(serialNumber).orElseThrow(() ->
-                new RuntimeException(
-                        String.format("Drone with serial number: '%s' doesn't exist", serialNumber)));
+        Drone drone = repository.findById(serialNumber).orElseThrow(() -> new DroneNotFoundException(serialNumber));
 
         Set<Medication> medications = medicationMapper.toEntitySet(medicationDtos);
         drone.getMedications().addAll(medications);
@@ -46,10 +45,7 @@ public class DroneManagerServiceImpl implements DroneManagerService {
 
     @Override
     public Set<MedicationDto> checkLoading(String serialNumber) {
-        Drone drone = repository.findById(serialNumber).orElseThrow(() ->
-                new RuntimeException(
-                        String.format("Drone with serial number: '%s' doesn't exist", serialNumber)));
-
+        Drone drone = repository.findById(serialNumber).orElseThrow(() -> new DroneNotFoundException(serialNumber));
         return medicationMapper.toDtoSet(drone.getMedications());
     }
 
@@ -61,10 +57,7 @@ public class DroneManagerServiceImpl implements DroneManagerService {
 
     @Override
     public BatteryDto checkBattery(String serialNumber) {
-        Drone drone = repository.findById(serialNumber).orElseThrow(() ->
-                new RuntimeException(
-                        String.format("Drone with serial number: '%s' doesn't exist", serialNumber)));
-
+        Drone drone = repository.findById(serialNumber).orElseThrow(() -> new DroneNotFoundException(serialNumber));
         return droneMapper.mapToBatteryDto(drone);
     }
 }
