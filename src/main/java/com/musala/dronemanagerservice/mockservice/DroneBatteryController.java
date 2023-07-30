@@ -1,0 +1,20 @@
+package com.musala.dronemanagerservice.mockservice;
+
+import com.musala.dronemanagerservice.model.dto.BatteryDto;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.random.RandomGenerator;
+
+@RestController
+@RequestMapping("mock/drone/battery")
+public class DroneBatteryController {
+
+    @GetMapping("/{serialNumber}")
+    public BatteryDto getMockBattery(@PathVariable String serialNumber) {
+        byte randomBattery = (byte) (RandomGenerator.getDefault().nextInt(101));
+        return new BatteryDto(serialNumber, randomBattery);
+    }
+}
