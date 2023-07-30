@@ -15,7 +15,7 @@ class BatteryCapacityOfLoadingDroneValidationTest {
     @Test
     void testChargedDroneLoading() {
         Drone drone = Utils.getStockDrone();
-        drone.setBatteryCapacity(25.0f);
+        drone.setBatteryCapacity((byte)25);
         String errorMessage = validation.validate(drone);
         assertTrue(StringUtils.isEmpty(errorMessage));
     }
@@ -23,8 +23,8 @@ class BatteryCapacityOfLoadingDroneValidationTest {
     @Test
     void testDischargedDroneLoading() {
         Drone drone = Utils.getStockDrone();
-        drone.setBatteryCapacity(24.99f);
+        drone.setBatteryCapacity((byte)24);
         String errorMessage = validation.validate(drone);
-        assertEquals(String.format("Drone %s has 24.99 battery capacity and need to be charged", drone.getSerialNumber()), errorMessage);
+        assertEquals(String.format("Drone %s has 24%% battery capacity and need to be charged", drone.getSerialNumber()), errorMessage);
     }
 }

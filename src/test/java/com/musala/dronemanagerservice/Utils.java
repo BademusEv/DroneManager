@@ -45,12 +45,12 @@ public class Utils {
 
     public DroneDto getStockDroneDto(String serialNumber) {
         return new DroneDto(serialNumber, Model.LIGHTWEIGHT, 500,
-                60.4f, State.IDLE, new HashSet<>());
+                (byte)60, State.IDLE, new HashSet<>());
     }
 
     public DroneDto getStockDroneDto() {
         return new DroneDto(UUID.randomUUID().toString(), Model.LIGHTWEIGHT, 500,
-                60.4f, State.IDLE, new HashSet<>());
+                (byte)60, State.IDLE, new HashSet<>());
     }
 
     public String getBase64Resource(String fileName) throws IOException, URISyntaxException {

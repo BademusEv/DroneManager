@@ -65,7 +65,7 @@ class DroneManagerServiceImplTest {
         when(medicationMapper.toEntitySet(eq(medicationsDto))).thenReturn(medications);
         when(repository.save(drone)).thenReturn(drone);
         doNothing().when(validator).validate(drone);
-        var expectedDrone = new DroneDto("egwfe134af", Model.LIGHTWEIGHT, 500, 50.3f, State.LOADED, medicationsDto);
+        var expectedDrone = new DroneDto("egwfe134af", Model.LIGHTWEIGHT, 500, (byte)50, State.LOADED, medicationsDto);
         when(droneMapper.mapToDto(drone)).thenReturn(expectedDrone);
 
         var actualDrone = service.loadDrone("egwfe134af", medicationsDto);

@@ -11,7 +11,6 @@ import com.musala.dronemanagerservice.model.dto.RegisterDroneDto;
 import com.musala.dronemanagerservice.model.entiry.Drone;
 import com.musala.dronemanagerservice.model.entiry.Medication;
 import com.musala.dronemanagerservice.repository.DroneRepository;
-import com.musala.dronemanagerservice.validator.Validation;
 import com.musala.dronemanagerservice.validator.Validator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

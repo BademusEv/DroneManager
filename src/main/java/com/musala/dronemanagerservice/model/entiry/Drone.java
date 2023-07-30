@@ -18,7 +18,7 @@ import java.util.Set;
 @Data
 @Builder
 @NoArgsConstructor
-@Document(collection = "drones")
+@Document(collection = "drone")
 public class Drone {
     @Id
     @Size(max = 100, message = "Serial max size is 100")
@@ -27,11 +27,11 @@ public class Drone {
     private Integer weightLimit;
     @Max(value = 100, message = "Battery capacity should be between 0 and 100")
     @Min(value = 0, message = "Battery capacity should be between 0 and 100")
-    private Float batteryCapacity;
+    private Byte batteryCapacity;
     private State state;
     private Set<Medication> medications = new HashSet<>();
 
-    public Drone(String serialNumber, Model model, Integer weightLimit, Float batteryCapacity, State state, Set<Medication> medications) {
+    public Drone(String serialNumber, Model model, Integer weightLimit, Byte batteryCapacity, State state, Set<Medication> medications) {
         this.serialNumber = serialNumber;
         this.model = model;
         this.weightLimit = weightLimit;

@@ -61,7 +61,7 @@ class DroneControllerTest {
         String base64Image = Utils.getBase64Resource("medicationsPhoto.png");
         Set<MedicationDto> medications = Set.of(new MedicationDto("A", 41, "3142dwr", base64Image),
                 new MedicationDto("B", 35, "dwr234r", base64Image));
-        DroneDto droneDto = new DroneDto("feqwre1421", Model.LIGHTWEIGHT, 500, 60.2f, State.LOADED, medications);
+        DroneDto droneDto = new DroneDto("feqwre1421", Model.LIGHTWEIGHT, 500, (byte)60, State.LOADED, medications);
         when(service.loadDrone(anyString(), anySet())).thenReturn(droneDto);
 
         mockMvc.perform(put("/drone/load/feqwre1421")

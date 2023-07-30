@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -53,7 +54,7 @@ public class DroneController {
             @ApiResponse(responseCode = "400"),
             @ApiResponse(responseCode = "500")
     })
-    public void registerDrone(@RequestBody RegisterDroneDto drone) {
+    public void registerDrone(@RequestBody @Validated RegisterDroneDto drone) {
         service.registerDrone(drone);
     }
 
@@ -79,7 +80,7 @@ public class DroneController {
                        "serialNumber": "3524fadfqe142",
                        "model": "Lightweight",
                        "weightLimit": 500,
-                       "batteryCapacity": 39.3,
+                       "batteryCapacity": 39,
                        "state": "IDLE",
                        "medications": [
                          {
@@ -97,7 +98,7 @@ public class DroneController {
             @ApiResponse(responseCode = "500")
     })
     public DroneDto loadDrone(@Parameter(description = "Serial number of the drone to load") @PathVariable String serialNumber,
-                              @RequestBody Set<MedicationDto> medication) {
+                              @RequestBody @Validated Set<MedicationDto> medication) {
         return service.loadDrone(serialNumber, medication);
     }
 
@@ -125,14 +126,14 @@ public class DroneController {
                        "serialNumber": "3524fadfqe142",
                        "model": "Lightweight",
                        "weightLimit": 500,
-                       "batteryCapacity": 39.3,
+                       "batteryCapacity": 39,
                        "state": "IDLE"
                      },
                      {
                        "serialNumber": "435234qewg",
                        "model": "Lightweight",
                        "weightLimit": 500,
-                       "batteryCapacity": 70.3,
+                       "batteryCapacity": 70,
                        "state": "IDLE"
                      }]"""))),
             @ApiResponse(responseCode = "400"),
@@ -147,7 +148,7 @@ public class DroneController {
             @ApiResponse(responseCode = "200", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, examples = @ExampleObject(name = "LoadedDroneInfo", value = """
                     {
                       "serialNumber": "64c5083015dbb401e23373fc",
-                      "batteryCapacity": 24.6
+                      "batteryCapacity": 24
                     }"""))),
             @ApiResponse(responseCode = "404"),
             @ApiResponse(responseCode = "500")
