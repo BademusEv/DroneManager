@@ -58,7 +58,6 @@ public class DroneController {
     }
 
     @PutMapping("/load/{serialNumber}")
-    @ResponseStatus(HttpStatus.CREATED)
     @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true,
             description = "Load medications",
             content =
@@ -92,6 +91,7 @@ public class DroneController {
                        ]
                      }
                      """))),
+            @ApiResponse(responseCode = "200"),
             @ApiResponse(responseCode = "400"),
             @ApiResponse(responseCode = "404"),
             @ApiResponse(responseCode = "500")

@@ -1,17 +1,16 @@
 package com.musala.dronemanagerservice.validator;
 
-import com.musala.dronemanagerservice.exception.DroneOverloadedException;
 import com.musala.dronemanagerservice.model.entiry.Drone;
 import com.musala.dronemanagerservice.model.entiry.Medication;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class ValidatorTest {
+class MaxLoadedWeightValidationTest {
     
 
     @Test
@@ -24,7 +23,8 @@ class ValidatorTest {
                 .weightLimit(500)
                 .medications(medicationsWithAcceptableWeight)
                 .build();
-        assertDoesNotThrow(() -> Validator.validate(drone));
+        String errorMessage = new MaxLoadedWeightValidation().validate(drone);
+        assertTrue(StringUtils.isEmpty(errorMessage));
     }
 
     @Test
@@ -37,7 +37,7 @@ class ValidatorTest {
                 .weightLimit(500)
                 .medications(medicationsWithAcceptableWeight)
                 .build();
-        DroneOverloadedException droneOverloadedException = assertThrows(DroneOverloadedException.class, () -> Validator.validate(drone));
-        assertEquals("Drone efgwbe2331advjkln has 500 g weight limit. The current weight is: 501 g", droneOverloadedException.getLocalizedMessage());
+        String errorMessage = new MaxLoadedWeightValidation().validate(drone);
+        assertEquals("Drone efgwbe2331advjkln has 500 g weight limit. The current weight is: 501 g", errorMessage);
     }
 }

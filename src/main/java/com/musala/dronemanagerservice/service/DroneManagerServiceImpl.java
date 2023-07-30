@@ -11,6 +11,7 @@ import com.musala.dronemanagerservice.model.dto.RegisterDroneDto;
 import com.musala.dronemanagerservice.model.entiry.Drone;
 import com.musala.dronemanagerservice.model.entiry.Medication;
 import com.musala.dronemanagerservice.repository.DroneRepository;
+import com.musala.dronemanagerservice.validator.Validation;
 import com.musala.dronemanagerservice.validator.Validator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ public class DroneManagerServiceImpl implements DroneManagerService {
     private final DroneMapper droneMapper;
     private final MedicationMapper medicationMapper;
     private final DroneRepository repository;
+    private final Validator validator;
 
     @Override
     public void registerDrone(RegisterDroneDto droneDto) {
@@ -37,7 +39,7 @@ public class DroneManagerServiceImpl implements DroneManagerService {
 
         Set<Medication> medications = medicationMapper.toEntitySet(medicationDtos);
         drone.getMedications().addAll(medications);
-        Validator.validate(drone);
+        validator.validate(drone);
 
         drone = repository.save(drone);
         return droneMapper.mapToDto(drone);

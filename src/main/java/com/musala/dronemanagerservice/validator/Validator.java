@@ -1,17 +1,25 @@
 package com.musala.dronemanagerservice.validator;
 
-import com.musala.dronemanagerservice.exception.DroneOverloadedException;
 import com.musala.dronemanagerservice.model.entiry.Drone;
-import com.musala.dronemanagerservice.model.entiry.Medication;
-import lombok.experimental.UtilityClass;
+import jakarta.validation.ValidationException;
+import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Component;
 
-@UtilityClass
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Component
+@RequiredArgsConstructor
 public class Validator {
 
+    private final ValidationFactory factory;
+
     public void validate(Drone drone) {
-        int loadedWeight = drone.getMedications().stream().mapToInt(Medication::getWeight).sum();
-        if (loadedWeight > drone.getWeightLimit()) {
-            throw new DroneOverloadedException(drone, loadedWeight);
+        List<Validation<Drone>> validations = factory.getValidations(Drone.class);
+        String validationErrors = validations.stream().map(v -> v.validate(drone)).collect(Collectors.joining("; "));
+        if (StringUtils.isNoneEmpty(validationErrors)) {
+            throw new ValidationException(validationErrors);
         }
     }
 }

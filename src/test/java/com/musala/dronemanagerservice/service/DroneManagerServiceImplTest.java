@@ -12,6 +12,9 @@ import com.musala.dronemanagerservice.model.dto.RegisterDroneDto;
 import com.musala.dronemanagerservice.model.entiry.Drone;
 import com.musala.dronemanagerservice.model.entiry.Medication;
 import com.musala.dronemanagerservice.repository.DroneRepository;
+import com.musala.dronemanagerservice.validator.MaxLoadedWeightValidation;
+import com.musala.dronemanagerservice.validator.ValidationFactory;
+import com.musala.dronemanagerservice.validator.Validator;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,6 +29,9 @@ import java.util.stream.Collectors;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.nullable;
+import static org.mockito.Mockito.description;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -38,6 +44,8 @@ class DroneManagerServiceImplTest {
     MedicationMapper medicationMapper;
     @Mock
     DroneRepository repository;
+    @Mock
+    Validator validator;
     @InjectMocks
     DroneManagerServiceImpl service;
 
@@ -53,7 +61,7 @@ class DroneManagerServiceImplTest {
     }
 
     @Test
-    void tesDroneLoading() {
+    void testDroneLoading() {
         var medicationsDto = Set.of(new MedicationDto("A", 41, "13431", "base64EncodedImage1"));
         var medications = Set.of(Medication.builder().name("A").weight(41).code("13431").image("base64EncodedImage1").build());
 
@@ -61,6 +69,7 @@ class DroneManagerServiceImplTest {
         when(repository.findById(eq("egwfe134af"))).thenReturn(Optional.of(drone));
         when(medicationMapper.toEntitySet(eq(medicationsDto))).thenReturn(medications);
         when(repository.save(drone)).thenReturn(drone);
+        doNothing().when(validator).validate(drone);
         var expectedDrone = new DroneDto("egwfe134af", Model.LIGHTWEIGHT, 500, 50.3f, State.LOADED, medicationsDto);
         when(droneMapper.mapToDto(drone)).thenReturn(expectedDrone);
 
@@ -69,6 +78,7 @@ class DroneManagerServiceImplTest {
         assertEquals(expectedDrone, actualDrone);
         verify(repository).findById("egwfe134af");
         verify(medicationMapper).toEntitySet(medicationsDto);
+        verify(validator).validate(drone);
         verify(repository).save(drone);
         verify(droneMapper).mapToDto(drone);
 
