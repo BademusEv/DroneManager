@@ -1,4 +1,4 @@
-package com.musala.dronemanagerservice.validator;
+package com.musala.dronemanagerservice.validator.impl;
 
 import com.musala.dronemanagerservice.model.entiry.Drone;
 import com.musala.dronemanagerservice.model.entiry.Medication;
