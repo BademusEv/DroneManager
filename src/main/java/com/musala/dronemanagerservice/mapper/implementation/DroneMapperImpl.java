@@ -10,7 +10,7 @@ import com.musala.dronemanagerservice.model.entiry.Drone;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -20,10 +20,11 @@ public class DroneMapperImpl implements DroneMapper {
 
     private final MedicationMapper medicationMapper;
 
-    public Drone mapToEntity(RegisterDroneDto dto){
+    public Drone mapToEntity(RegisterDroneDto dto) {
         return Drone.builder()
                 .serialNumber(dto.serialNumber())
                 .weightLimit(dto.weightLimit())
+                .batteryCapacity((byte) 0)
                 .model(dto.model())
                 .state(State.IDLE)
                 .build();
