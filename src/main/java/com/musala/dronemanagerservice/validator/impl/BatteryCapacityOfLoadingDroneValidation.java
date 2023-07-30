@@ -9,7 +9,7 @@ public class BatteryCapacityOfLoadingDroneValidation implements Validation<Drone
     @Override
     public String validate(Drone drone) {
         String errorMessage = null;
-        if(drone.getBatteryCapacity() < 25.0){
+        if(drone.getBatteryCapacity() < 25){
             errorMessage = String.format("Drone %s has %s%% battery capacity and need to be charged",
                     drone.getSerialNumber(), drone.getBatteryCapacity());
         }

@@ -4,6 +4,7 @@ spring:
       uri: mongodb://localhost:27017/drones
       username: root
       password: secret
+      auto-index-creation: on
 
 springdoc:
   api-docs.path: /api-docs

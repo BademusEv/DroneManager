@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.Max;
@@ -28,6 +29,7 @@ public class Drone {
     @Max(value = 100, message = "Battery capacity should be between 0 and 100")
     @Min(value = 0, message = "Battery capacity should be between 0 and 100")
     private Byte batteryCapacity;
+    @Indexed(name = "stateIndex")
     private State state;
     private Set<Medication> medications = new HashSet<>();
 
