@@ -9,9 +9,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -22,12 +19,9 @@ import java.util.Set;
 @Document(collection = "drone")
 public class Drone {
     @Id
-    @Size(max = 100, message = "Serial max size is 100")
     private String serialNumber;
     private Model model;
     private Integer weightLimit;
-    @Max(value = 100, message = "Battery capacity should be between 0 and 100")
-    @Min(value = 0, message = "Battery capacity should be between 0 and 100")
     private Byte batteryCapacity;
     @Indexed(name = "stateIndex")
     private State state;
