@@ -52,7 +52,7 @@ public class DroneManagerServiceImpl implements DroneManagerService {
 
     @Override
     public Set<DroneDto> getAvailableDrones() {
-        Set<Drone> availableDrones = repository.findAllByState(State.IDLE);
+        Set<Drone> availableDrones = repository.findAllByStateIn(Set.of(State.IDLE, State.LOADING));
         return droneMapper.mapToDtoSet(availableDrones);
     }
 

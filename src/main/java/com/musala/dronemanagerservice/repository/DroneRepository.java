@@ -7,5 +7,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import java.util.Set;
 
 public interface DroneRepository extends MongoRepository<Drone, String> {
-    Set<Drone> findAllByState(State state);
+    Set<Drone> findAllByStateIn(Set<State> state);
 }

@@ -32,7 +32,8 @@ public class CheckBatteryJob {
             BatteryDto battery = checkClient.checkBattery(drone.getSerialNumber());
             drone.setBatteryCapacity(battery.batteryCapacity());
             droneRepository.save(drone);
-            auditRepository.save(new Audit(UUID.randomUUID().toString(), drone.getSerialNumber(), battery.batteryCapacity(), LocalDateTime.now()));
+            Audit audit = new Audit(UUID.randomUUID().toString(), drone.getSerialNumber(), battery.batteryCapacity(), LocalDateTime.now());
+            auditRepository.save(audit);
         });
         log.info("drone's battery info updated");
     }

@@ -1,4 +1,4 @@
-package com.musala.dronemanagerservice.mockservice;
+package com.musala.dronemanagerservice.mock;
 
 import com.musala.dronemanagerservice.model.dto.BatteryDto;
 import org.springframework.web.bind.annotation.GetMapping;
