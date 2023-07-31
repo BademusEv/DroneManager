@@ -17,7 +17,9 @@ public class Validator {
 
     public void validate(Drone drone) {
         List<Validation<Drone>> validations = factory.getValidations(Drone.class);
-        String validationErrors = validations.stream().map(v -> v.validate(drone)).collect(Collectors.joining("; "));
+        String validationErrors = validations.stream().map(v -> v.validate(drone))
+                .filter(StringUtils::isNoneEmpty)
+                .collect(Collectors.joining("; "));
         if (StringUtils.isNoneEmpty(validationErrors)) {
             throw new ValidationException(validationErrors);
         }
