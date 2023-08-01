@@ -4,16 +4,15 @@ import com.musala.dronemanagerservice.model.dto.BatteryDto;
 import com.musala.dronemanagerservice.model.dto.DroneDto;
 import com.musala.dronemanagerservice.model.dto.RegisterDroneDto;
 import com.musala.dronemanagerservice.model.entiry.Drone;
-
-import java.util.List;
 import java.util.Set;
 
 public interface DroneMapper {
 
-    Drone mapToEntity(RegisterDroneDto dto);
-    DroneDto mapToDto(Drone entity);
+  Drone mapToEntity(RegisterDroneDto dto);
 
-    Set<DroneDto> mapToDtoSet(Set<Drone> drones);
+  DroneDto mapToDto(Drone entity);
 
-    BatteryDto mapToBatteryDto(Drone drone);
+  Set<DroneDto> mapToDtoSet(Set<Drone> drones);
+
+  BatteryDto mapToBatteryDto(Drone drone);
 }

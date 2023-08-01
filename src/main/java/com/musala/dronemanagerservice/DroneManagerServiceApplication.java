@@ -8,8 +8,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 public class DroneManagerServiceApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(DroneManagerServiceApplication.class, args);
-    }
+  public static void main(String[] args) {
+    SpringApplication.run(DroneManagerServiceApplication.class, args);
+  }
 
 }

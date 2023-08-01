@@ -6,8 +6,9 @@ import lombok.Data;
 @Data
 @Builder
 public class Medication {
-    private String name;
-    private Integer weight;
-    private String code;
-    private String image;
+
+  private String name;
+  private Integer weight;
+  private String code;
+  private String image;
 }

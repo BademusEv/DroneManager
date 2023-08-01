@@ -3,13 +3,13 @@ package com.musala.dronemanagerservice.mapper.implementation;
 import com.musala.dronemanagerservice.mapper.MedicationMapper;
 import com.musala.dronemanagerservice.model.dto.MedicationDto;
 import com.musala.dronemanagerservice.model.entiry.Medication;
-import org.springframework.stereotype.Component;
-
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.springframework.stereotype.Component;
 
 @Component
 public class MedicationMapperImpl implements MedicationMapper {
+
     @Override
     public Medication toEntity(MedicationDto dto) {
         return Medication.builder()
@@ -32,7 +32,8 @@ public class MedicationMapperImpl implements MedicationMapper {
 
     @Override
     public MedicationDto toDto(Medication medication) {
-        return new MedicationDto(medication.getName(), medication.getWeight(), medication.getCode(), medication.getImage());
+        return new MedicationDto(medication.getName(), medication.getWeight(), medication.getCode(),
+                medication.getImage());
     }
 
 }
