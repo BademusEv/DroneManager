@@ -110,7 +110,7 @@ class DroneManagerServiceImplTest {
         Set<String> serialNumbers = drones.stream().map(Drone::getSerialNumber).collect(Collectors.toSet());
         Set<DroneDto> droneDtos = Utils.getStockDroneDto(serialNumbers);
 
-        when(repository.findAllByState(State.IDLE)).thenReturn(drones);
+        when(repository.findAllByStateIn(Set.of(State.IDLE, State.LOADING))).thenReturn(drones);
         when(droneMapper.mapToDtoSet(drones)).thenReturn(droneDtos);
 
         Set<DroneDto> availableDrones = service.getAvailableDrones();
@@ -120,7 +120,7 @@ class DroneManagerServiceImplTest {
                 .collect(Collectors.toSet());
 
         assertEquals(serialNumbers, actualSerialNumbers);
-        verify(repository).findAllByState(State.IDLE);
+        verify(repository).findAllByStateIn(Set.of(State.IDLE, State.LOADING));
         verify(droneMapper).mapToDtoSet(drones);
     }
 

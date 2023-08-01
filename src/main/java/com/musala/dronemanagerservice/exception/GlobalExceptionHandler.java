@@ -30,6 +30,12 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(new ErrorMessage(ex.getMessage(), ErrorCode.ENTITY_NOT_FOUND), HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(EntityAlreadyExistException.class)
+    public ResponseEntity<ErrorMessage> handleEntityAlreadyExistException(EntityAlreadyExistException ex) {
+        log.debug(ex.getMessage());
+        return new ResponseEntity<>(new ErrorMessage(ex.getMessage(), ErrorCode.DUPLICATION_ENTITY), HttpStatus.CONFLICT);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorMessage> handleValidationException(MethodArgumentNotValidException ex) {
         log.debug(ex.getMessage());

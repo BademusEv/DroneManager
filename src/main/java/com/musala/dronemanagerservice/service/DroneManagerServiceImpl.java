@@ -1,6 +1,7 @@
 package com.musala.dronemanagerservice.service;
 
 import com.musala.dronemanagerservice.exception.DroneNotFoundException;
+import com.musala.dronemanagerservice.exception.EntityAlreadyExistException;
 import com.musala.dronemanagerservice.mapper.DroneMapper;
 import com.musala.dronemanagerservice.mapper.MedicationMapper;
 import com.musala.dronemanagerservice.model.constant.State;
@@ -29,6 +30,10 @@ public class DroneManagerServiceImpl implements DroneManagerService {
     @Override
     public void registerDrone(RegisterDroneDto droneDto) {
         Drone drone = droneMapper.mapToEntity(droneDto);
+        boolean isPresent = repository.findById(drone.getSerialNumber()).isPresent();
+        if (isPresent) {
+            throw new EntityAlreadyExistException("Drone", droneDto.serialNumber());
+        }
         repository.save(drone);
     }
 
