@@ -1,13 +1,16 @@
 package com.musala.dronemanagerservice.service;
 
+import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.musala.dronemanagerservice.Utils;
+import com.musala.dronemanagerservice.exception.EntityAlreadyExistException;
 import com.musala.dronemanagerservice.mapper.MedicationMapper;
 import com.musala.dronemanagerservice.mapper.implementation.DroneMapperImpl;
 import com.musala.dronemanagerservice.model.constant.Model;
@@ -52,6 +55,19 @@ class DroneManagerServiceImplTest {
     service.registerDrone(dto);
     verify(droneMapper).mapToEntity(dto);
     verify(repository).save(drone);
+  }
+
+  @Test
+  void testRegisterExistingDroneThrowsException() {
+    var drone = Utils.getStockDrone();
+    var dto = new RegisterDroneDto(drone.getSerialNumber(), Model.LIGHTWEIGHT, 500);
+    when(droneMapper.mapToEntity(dto)).thenReturn(drone);
+    when(repository.findById(drone.getSerialNumber())).thenReturn(Optional.of(drone));
+
+    assertThrows(EntityAlreadyExistException.class, () -> service.registerDrone(dto));
+    verify(droneMapper).mapToEntity(dto);
+
+    verify(repository, never()).save(drone);
   }
 
   @Test

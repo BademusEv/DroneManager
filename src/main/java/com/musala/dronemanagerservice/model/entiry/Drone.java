@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.Set;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -15,6 +16,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Data
 @Builder
 @NoArgsConstructor
+@EqualsAndHashCode(exclude = {"batteryCapacity", "state", "medications"})
 @Document(collection = "drone")
 public class Drone {
 
