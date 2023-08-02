@@ -16,13 +16,14 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class DroneMapperImpl implements DroneMapper {
 
+  private static final byte DEFAULT_BATTERY_CHARGE = (byte) 0;
   private final MedicationMapper medicationMapper;
 
   public Drone mapToEntity(RegisterDroneDto dto) {
     return Drone.builder()
         .serialNumber(dto.serialNumber())
         .weightLimit(dto.weightLimit())
-        .batteryCapacity((byte) 0)
+        .batteryCapacity(DEFAULT_BATTERY_CHARGE)
         .model(dto.model())
         .state(State.IDLE)
         .build();
@@ -49,6 +50,5 @@ public class DroneMapperImpl implements DroneMapper {
   public BatteryDto mapToBatteryDto(Drone drone) {
     return new BatteryDto(drone.getSerialNumber(), drone.getBatteryCapacity());
   }
-
 
 }

@@ -12,13 +12,14 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class Validator {
 
+  public static final String VALIDATION_ERRORS_DELIMITER = "; ";
   private final ValidationFactory factory;
 
   public void validate(Drone drone) {
     List<Validation<Drone>> validations = factory.getValidations(Drone.class);
     String validationErrors = validations.stream().map(v -> v.validate(drone))
         .filter(StringUtils::isNoneEmpty)
-        .collect(Collectors.joining("; "));
+        .collect(Collectors.joining(VALIDATION_ERRORS_DELIMITER));
     if (StringUtils.isNoneEmpty(validationErrors)) {
       throw new ValidationException(validationErrors);
     }

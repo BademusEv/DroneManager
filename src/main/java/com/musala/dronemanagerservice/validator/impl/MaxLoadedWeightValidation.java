@@ -8,12 +8,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class MaxLoadedWeightValidation implements Validation<Drone> {
 
+  private static final String ERROR_MESSAGE_TEMPLATE = "Drone %s has %s g weight limit. The current weight is: %s g";
+
   @Override
   public String validate(Drone entity) {
     int loaded = entity.getMedications().stream().mapToInt(Medication::getWeight).sum();
     String validationError = null;
     if (loaded > entity.getWeightLimit()) {
-      validationError = String.format("Drone %s has %s g weight limit. The current weight is: %s g",
+      validationError = String.format(ERROR_MESSAGE_TEMPLATE,
           entity.getSerialNumber(), entity.getWeightLimit(), loaded);
     }
     return validationError;

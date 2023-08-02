@@ -23,7 +23,7 @@ public class CheckBatteryJob {
   private final DroneBatteryCheckClient checkClient;
   private final AuditRepository auditRepository;
 
-  @Scheduled(fixedRate = 60000)
+  @Scheduled(fixedRateString = "${job.check-drone-battery}")
   public void checkBattery() {
     log.info("update drone's battery info");
     List<Drone> drones = droneRepository.findAll();

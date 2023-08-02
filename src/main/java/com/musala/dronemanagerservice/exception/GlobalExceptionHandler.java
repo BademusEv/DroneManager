@@ -1,5 +1,7 @@
 package com.musala.dronemanagerservice.exception;
 
+import static com.musala.dronemanagerservice.validator.Validator.VALIDATION_ERRORS_DELIMITER;
+
 import com.musala.dronemanagerservice.model.constant.ErrorCode;
 import com.musala.dronemanagerservice.model.dto.ErrorMessage;
 import jakarta.validation.ConstraintViolationException;
@@ -45,7 +47,7 @@ public class GlobalExceptionHandler {
     log.debug(ex.getMessage());
     var message = ex.getFieldErrors().stream()
         .map(DefaultMessageSourceResolvable::getDefaultMessage)
-        .collect(Collectors.joining("; "));
+        .collect(Collectors.joining(VALIDATION_ERRORS_DELIMITER));
     return new ResponseEntity<>(new ErrorMessage(message, ErrorCode.VALIDATION_ERROR),
         HttpStatus.BAD_REQUEST);
   }
@@ -54,9 +56,10 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(ConstraintViolationException.class)
   public ResponseEntity<ErrorMessage> handleValidationException(ConstraintViolationException ex) {
     log.debug(ex.getMessage());
-    var message = ex.getConstraintViolations().stream().map(
-        constraintViolation -> constraintViolation.getPropertyPath() + ": "
-            + constraintViolation.getMessage()).collect(Collectors.joining("; "));
+    var message = ex.getConstraintViolations().stream()
+        .map(constraintViolation -> String.format("%s: %s", constraintViolation.getPropertyPath(),
+            constraintViolation.getMessage()))
+        .collect(Collectors.joining(VALIDATION_ERRORS_DELIMITER));
     return new ResponseEntity<>(new ErrorMessage(message, ErrorCode.VALIDATION_ERROR),
         HttpStatus.BAD_REQUEST);
   }

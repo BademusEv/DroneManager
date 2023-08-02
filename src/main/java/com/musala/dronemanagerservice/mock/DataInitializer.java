@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class DataInitializer implements ApplicationRunner {
 
-  public static final String DB_INIT_PATH = "scripts/data-init.json";
+  private static final String DB_INIT_PATH = "scripts/data-init.json";
   private final DroneRepository droneRepository;
   private final ObjectMapper objectMapper;
 
