@@ -38,8 +38,7 @@ public class DroneManagerServiceImpl implements DroneManagerService {
 
   @Override
   public DroneDto loadDrone(String serialNumber, Set<MedicationDto> medicationDtos) {
-    Drone drone = repository.findById(serialNumber)
-        .orElseThrow(() -> new DroneNotFoundException(serialNumber));
+    Drone drone = getDrone(serialNumber);
 
     Set<Medication> medications = medicationMapper.toEntitySet(medicationDtos);
     drone.getMedications().addAll(medications);
@@ -51,8 +50,7 @@ public class DroneManagerServiceImpl implements DroneManagerService {
 
   @Override
   public Set<MedicationDto> checkLoading(String serialNumber) {
-    Drone drone = repository.findById(serialNumber)
-        .orElseThrow(() -> new DroneNotFoundException(serialNumber));
+    Drone drone = getDrone(serialNumber);
     return medicationMapper.toDtoSet(drone.getMedications());
   }
 
@@ -64,8 +62,12 @@ public class DroneManagerServiceImpl implements DroneManagerService {
 
   @Override
   public BatteryDto checkBattery(String serialNumber) {
-    Drone drone = repository.findById(serialNumber)
-        .orElseThrow(() -> new DroneNotFoundException(serialNumber));
+    Drone drone = getDrone(serialNumber);
     return droneMapper.mapToBatteryDto(drone);
+  }
+
+  private Drone getDrone(String serialNumber) {
+    return repository.findById(serialNumber)
+        .orElseThrow(() -> new DroneNotFoundException(serialNumber));
   }
 }
