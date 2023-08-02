@@ -10,6 +10,7 @@ public record RegisterDroneDto(
     String serialNumber,
     @NotNull(message = "Model must be filled")
     Model model,
+    @NotNull(message = "Weight limit must be filled")
     Integer weightLimit
 ) {
 
