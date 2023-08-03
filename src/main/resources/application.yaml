@@ -18,4 +18,4 @@ client:
       uri: http://localhost:8080/mock/drone/battery/
 
 job:
-  check-drone-battery: 6000
+  check-drone-battery: 60000
