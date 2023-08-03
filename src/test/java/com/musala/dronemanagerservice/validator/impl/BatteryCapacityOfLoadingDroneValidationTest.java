@@ -7,10 +7,15 @@ import com.musala.dronemanagerservice.Utils;
 import com.musala.dronemanagerservice.model.entiry.Drone;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
+import org.springframework.test.util.ReflectionTestUtils;
 
 class BatteryCapacityOfLoadingDroneValidationTest {
 
   BatteryCapacityOfLoadingDroneValidation validation = new BatteryCapacityOfLoadingDroneValidation();
+
+  {
+    ReflectionTestUtils.setField(validation, "minimumBattery", (byte) 25);
+  }
 
   @Test
   void testChargedDroneLoading() {

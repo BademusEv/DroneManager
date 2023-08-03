@@ -1,5 +1,6 @@
 package com.musala.dronemanagerservice.service;
 
+import com.musala.dronemanagerservice.client.DroneBatteryCheckClient;
 import com.musala.dronemanagerservice.exception.DroneNotFoundException;
 import com.musala.dronemanagerservice.exception.EntityAlreadyExistException;
 import com.musala.dronemanagerservice.mapper.DroneMapper;
@@ -15,6 +16,7 @@ import com.musala.dronemanagerservice.repository.DroneRepository;
 import com.musala.dronemanagerservice.validator.Validator;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -25,6 +27,10 @@ public class DroneManagerServiceImpl implements DroneManagerService {
   private final MedicationMapper medicationMapper;
   private final DroneRepository repository;
   private final Validator validator;
+  private final DroneBatteryCheckClient batteryCheckClient;
+
+  @Value("${validation.drone.minimum-battery}")
+  private Byte minimumBattery;
 
   @Override
   public void registerDrone(RegisterDroneDto droneDto) {
@@ -33,6 +39,8 @@ public class DroneManagerServiceImpl implements DroneManagerService {
     if (isPresent) {
       throw new EntityAlreadyExistException("Drone", droneDto.serialNumber());
     }
+    BatteryDto battery = batteryCheckClient.checkBattery(drone.getSerialNumber());
+    drone.setBatteryCapacity(battery.batteryCapacity());
     repository.save(drone);
   }
 
@@ -43,7 +51,7 @@ public class DroneManagerServiceImpl implements DroneManagerService {
     Set<Medication> medications = medicationMapper.toEntitySet(medicationDtos);
     drone.getMedications().addAll(medications);
     validator.validate(drone);
-
+    drone.setState(State.LOADING);
     drone = repository.save(drone);
     return droneMapper.mapToDto(drone);
   }
@@ -56,7 +64,8 @@ public class DroneManagerServiceImpl implements DroneManagerService {
 
   @Override
   public Set<DroneDto> getAvailableDrones() {
-    Set<Drone> availableDrones = repository.findAllByStateIn(Set.of(State.IDLE, State.LOADING));
+    Set<Drone> availableDrones = repository.findAllByStateInAndBatteryCapacityAfter(
+        Set.of(State.IDLE, State.LOADING), (byte) (minimumBattery - 1));
     return droneMapper.mapToDtoSet(availableDrones);
   }
 

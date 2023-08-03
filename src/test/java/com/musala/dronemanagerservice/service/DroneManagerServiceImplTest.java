@@ -3,6 +3,7 @@ package com.musala.dronemanagerservice.service;
 import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.never;
@@ -10,6 +11,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.musala.dronemanagerservice.Utils;
+import com.musala.dronemanagerservice.client.DroneBatteryCheckClient;
 import com.musala.dronemanagerservice.exception.EntityAlreadyExistException;
 import com.musala.dronemanagerservice.mapper.MedicationMapper;
 import com.musala.dronemanagerservice.mapper.implementation.DroneMapperImpl;
@@ -31,6 +33,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 
 @ExtendWith(SpringExtension.class)
 class DroneManagerServiceImplTest {
@@ -43,6 +46,8 @@ class DroneManagerServiceImplTest {
   DroneRepository repository;
   @Mock
   Validator validator;
+  @Mock
+  DroneBatteryCheckClient droneBatteryCheckClient;
   @InjectMocks
   DroneManagerServiceImpl service;
 
@@ -52,7 +57,11 @@ class DroneManagerServiceImplTest {
     var dto = new RegisterDroneDto(drone.getSerialNumber(), Model.LIGHTWEIGHT, 500);
 
     when(droneMapper.mapToEntity(dto)).thenReturn(drone);
+    when(droneBatteryCheckClient.checkBattery(anyString())).thenReturn(new BatteryDto(
+        drone.getSerialNumber(), (byte) 40));
+
     service.registerDrone(dto);
+
     verify(droneMapper).mapToEntity(dto);
     verify(repository).save(drone);
   }
@@ -82,7 +91,7 @@ class DroneManagerServiceImplTest {
     when(medicationMapper.toEntitySet(eq(medicationsDto))).thenReturn(medications);
     when(repository.save(drone)).thenReturn(drone);
     doNothing().when(validator).validate(drone);
-    var expectedDrone = new DroneDto("egwfe134af", Model.LIGHTWEIGHT, 500, (byte) 50, State.LOADED,
+    var expectedDrone = new DroneDto("egwfe134af", Model.LIGHTWEIGHT, 500, (byte) 50, State.LOADING,
         medicationsDto);
     when(droneMapper.mapToDto(drone)).thenReturn(expectedDrone);
 
@@ -128,8 +137,9 @@ class DroneManagerServiceImplTest {
     Set<String> serialNumbers = drones.stream().map(Drone::getSerialNumber)
         .collect(Collectors.toSet());
     Set<DroneDto> droneDtos = Utils.getStockDroneDto(serialNumbers);
-
-    when(repository.findAllByStateIn(Set.of(State.IDLE, State.LOADING))).thenReturn(drones);
+    ReflectionTestUtils.setField(service, "minimumBattery", (byte) 25);
+    when(repository.findAllByStateInAndBatteryCapacityAfter(Set.of(State.IDLE, State.LOADING),
+        (byte) 24)).thenReturn(drones);
     when(droneMapper.mapToDtoSet(drones)).thenReturn(droneDtos);
 
     Set<DroneDto> availableDrones = service.getAvailableDrones();
@@ -139,7 +149,8 @@ class DroneManagerServiceImplTest {
         .collect(Collectors.toSet());
 
     assertEquals(serialNumbers, actualSerialNumbers);
-    verify(repository).findAllByStateIn(Set.of(State.IDLE, State.LOADING));
+    verify(repository).findAllByStateInAndBatteryCapacityAfter(Set.of(State.IDLE, State.LOADING),
+        (byte) 24);
     verify(droneMapper).mapToDtoSet(drones);
   }
 

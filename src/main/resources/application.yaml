@@ -19,3 +19,7 @@ client:
 
 job:
   check-drone-battery: 60000
+
+validation:
+  drone:
+    minimum-battery: 25
