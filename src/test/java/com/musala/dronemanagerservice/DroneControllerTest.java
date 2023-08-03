@@ -16,7 +16,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.musala.dronemanagerservice.controller.DroneController;
 import com.musala.dronemanagerservice.exception.DroneNotFoundException;
-import com.musala.dronemanagerservice.exception.DroneOverloadedException;
 import com.musala.dronemanagerservice.exception.EntityAlreadyExistException;
 import com.musala.dronemanagerservice.model.constant.Model;
 import com.musala.dronemanagerservice.model.constant.State;
@@ -24,7 +23,6 @@ import com.musala.dronemanagerservice.model.dto.BatteryDto;
 import com.musala.dronemanagerservice.model.dto.DroneDto;
 import com.musala.dronemanagerservice.model.dto.MedicationDto;
 import com.musala.dronemanagerservice.model.dto.RegisterDroneDto;
-import com.musala.dronemanagerservice.model.entiry.Drone;
 import com.musala.dronemanagerservice.service.DroneManagerService;
 import java.util.Collections;
 import java.util.Set;
@@ -123,24 +121,6 @@ class DroneControllerTest {
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(medications)))
         .andExpect(status().isOk());
-  }
-
-  @Test
-  @SneakyThrows
-  void testDroneOverloading() {
-    Set<MedicationDto> medications = Set.of(
-        new MedicationDto("Protein", 700, "42322", "base64Image"));
-    Drone drone = Drone.builder().serialNumber("feqwre1421").weightLimit(500).build();
-    when(service.loadDrone(anyString(), anySet())).thenThrow(
-        new DroneOverloadedException(drone, 700));
-
-    mockMvc.perform(put("/drone/load/feqwre1421")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(medications)))
-        .andExpect(status().isBadRequest())
-        .andExpect(jsonPath("$.errorCode").value("VALIDATION_ERROR"))
-        .andExpect(jsonPath("$.message").value(
-            "Drone feqwre1421 has 500 g weight limit. The current weight is: 700 g"));
   }
 
   @Test

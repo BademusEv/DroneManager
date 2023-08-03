@@ -5,6 +5,7 @@ import static com.musala.dronemanagerservice.validator.Validator.VALIDATION_ERRO
 import com.musala.dronemanagerservice.model.constant.ErrorCode;
 import com.musala.dronemanagerservice.model.dto.ErrorMessage;
 import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.ValidationException;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -19,8 +20,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-  @ExceptionHandler(DroneOverloadedException.class)
-  public ResponseEntity<ErrorMessage> handleResourceNotFoundException(DroneOverloadedException ex) {
+  @ExceptionHandler(ValidationException.class)
+  public ResponseEntity<ErrorMessage> handleResourceNotFoundException(ValidationException ex) {
     log.debug(ex.getMessage());
     return new ResponseEntity<>(new ErrorMessage(ex.getMessage(), ErrorCode.VALIDATION_ERROR),
         HttpStatus.BAD_REQUEST);
