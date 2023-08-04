@@ -8,6 +8,8 @@
 
 ## How To:
 
+- for Windows use `mvnw.cmd` instead './mvnw'
+
 ### How to run the app
 
 - ./mvnw spring-boot:run
